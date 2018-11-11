@@ -9,14 +9,15 @@ def read_wav(filename):
         channel_num = 1
         frame_num = sound.shape[0]
     return sound, frame_rate, frame_num, channel_num
-filename = "./helloworld.wav"
-sound, frame_rate, frame_num, channel_num = read_wav(filename)
-if channel_num > 1:
-    sound = sound.sum(axis = 1)
-x = 1/frame_rate*np.arange(sound.size)
-pyplot.plot(x, sound/32768)
-pyplot.title('Hello world!', fontsize = 18)
-pyplot.xlabel('time (seconds)', fontsize = 14)
-pyplot.ylabel('Amplitude (max = 1)', fontsize = 14)
-print('Close plot to terminate')
-pyplot.show()
+FILENAME = "./helloworld.wav"
+if __name__ == '__main__':
+    sound, frame_rate, frame_num, channel_num = read_wav(FILENAME)
+    if channel_num > 1:
+        sound = sound.sum(axis = 1)
+    x = 1/frame_rate*np.arange(sound.size)
+    pyplot.plot(x, sound/32768)
+    pyplot.title('Hello world!', fontsize = 18)
+    pyplot.xlabel('time (seconds)', fontsize = 14)
+    pyplot.ylabel('Amplitude (max = 1)', fontsize = 14)
+    print('Close plot to terminate')
+    pyplot.show()
