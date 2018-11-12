@@ -2,6 +2,7 @@ import TDFT
 import numpy as np
 from scipy import fftpack
 import matplotlib.pyplot as pyplot
+import scipy.io.wavfile as wavfile
 FILENAME = TDFT.FILENAME
 sound, frame_rate = TDFT.sound, TDFT.frame_rate
 frame_num, channel_num = TDFT.frame_num, TDFT.channel_num
@@ -23,3 +24,4 @@ if __name__ == '__main__':
     pyplot.ylabel('Amplitude (max = 1)', fontsize = 14)
     print('Close plot to terminate')
     pyplot.show()
+    wavfile.write("GFBS_helloworld.wav", frame_rate, sound)
