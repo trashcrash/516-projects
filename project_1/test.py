@@ -1,4 +1,8 @@
-from scipy import fftpack
+import show_wav
 import numpy as np
-x = np.array([1,2,4,15,15,3,5,6])
-print(fftpack.fft(x))
+from scipy import fftpack
+import matplotlib.pyplot as pyplot
+import scipy.io.wavfile as wavfile
+FILENAME = show_wav.FILENAME
+sound, frame_rate, frame_num, channel_num = show_wav.read_wav(FILENAME)
+wavfile.write("test_helloworld.wav", frame_rate, sound)

@@ -19,14 +19,14 @@ def fft_in_window(begin, sound, window_width):
     return spectrum_in_window
 
 # Calculate dtft, L = window_width, M = window_width
-def get_tdft(sound, window_width, frame_num, L):
+def get_tdft(sound, window_width, frame_num):
     sound = np.append(sound, np.zeros(window_width))
     spectrum = fft_in_window(0, sound, window_width)
-    for n in range(window_width, frame_num, L):
+    for n in range(window_width, frame_num, window_width):
         spectrum_in_window = fft_in_window(n, sound, window_width)
         spectrum = np.vstack((spectrum, spectrum_in_window))
     sign_mat = np.sign(spectrum.real)
     spectrum_amplitude = abs(spectrum)*sign_mat
     return spectrum
 if __name__ == '__main__':
-    print(get_tdft(sound, window_width, frame_num, int(window_width/2)).shape)
+    print(get_tdft(sound, window_width, frame_num).shape)

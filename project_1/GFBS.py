@@ -7,13 +7,13 @@ FILENAME = TDFT.FILENAME
 sound, frame_rate = TDFT.sound, TDFT.frame_rate
 frame_num, channel_num = TDFT.frame_num, TDFT.channel_num
 window_width = TDFT.window_width
-spectrum = TDFT.get_tdft(sound, window_width, frame_num)
+L = window_width
+spectrum = TDFT.get_tdft(sound, window_width, frame_num, L)
 def get_gfbs(spectrum, window_width):
     sound = np.array([])
     for i in range(spectrum.shape[0]):
-        sound_in_window = fftpack.fft(spectrum[i,:])
+        sound_in_window = fftpack.ifft(spectrum[i,:])
         sound = np.append(sound, sound_in_window)
-    sound = sound/window_width
     return sound.real
 if __name__ == '__main__':
     sound = get_gfbs(spectrum, window_width)
