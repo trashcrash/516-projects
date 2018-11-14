@@ -10,6 +10,7 @@ sound, frame_rate, frame_num, channel_num = show_wav.read_wav(FILENAME)
 
 # Translate window width to indices
 window_width = int(WINDOW_WIDTH*frame_rate)
+window_width = frame_num
 if channel_num > 1:
     sound = sound.sum(axis = 1)
 

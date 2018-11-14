@@ -11,10 +11,14 @@ L = window_width
 spectrum = TDFT.get_tdft(sound, window_width, frame_num, L)
 def get_gfbs(spectrum, window_width):
     sound = np.array([])
-    for i in range(spectrum.shape[0]):
-        sound_in_window = fftpack.ifft(spectrum[i,:])
-        sound = np.append(sound, sound_in_window)
-    return sound.real
+    if spectrum.ndim > 1:
+        for i in range(spectrum.shape[0]):
+            sound_in_window = fftpack.ifft(spectrum[i,:])[0:L]
+            sound = np.append(sound, sound_in_window)
+        return sound.real
+    else:
+        sound = fftpack.ifft(spectrum)
+        return np.int16(np.round(sound.real))
 if __name__ == '__main__':
     sound = get_gfbs(spectrum, window_width)
     x = 1/frame_rate*np.arange(sound.size)
