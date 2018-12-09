@@ -1,4 +1,5 @@
 # 516-projects
+**The code is not optimized**
 ## Project 1
 Use GFBS method to recover the original signal.
 ## Project 2
