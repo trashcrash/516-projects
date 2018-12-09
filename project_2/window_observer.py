@@ -3,7 +3,7 @@ from scipy import fftpack
 import matplotlib.pyplot as pyplot
 import numpy as np
 
-DEBUG = True
+DEBUG = False
 
 def pick_window(signal, head, frame_rate, length_sec = 0.02):
     length_n = int(length_sec*frame_rate)
@@ -108,7 +108,10 @@ if __name__ == "__main__":
     LTI_signal = np.zeros(len(window))
     LTI_signal[0] = G_square**0.5
     h = get_model(LTI_signal, x, G_square, order, len(window))
+    h_dft = fftpack.fft(h)
+    h_magnitude = abs(h_dft)
     draw_signal(abs(h), frame_rate)
+    draw_dft(h_magnitude)
     if DEBUG:
         window = np.array([0.5, 1, 2, 1, 0.5, 0.25, 0.125])
         A = get_autocorr_matrix(window, 2)
