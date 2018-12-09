@@ -72,34 +72,42 @@ def get_G_square(signal, order, x):
 
 
 def get_H(length, x, G):
-    denominator = 1
     H = np.array([])
     for k in range(length):
+        denominator = 1
         for i in range(len(x)):
             denominator += x[i]*np.exp(-1j*k/length*(i+1))
         H_k = G/denominator
         H = np.append(H, H_k)
     return H
 
+
+def get_model(signal, x, G_square, order, length):
+    "Solve the difference equations"
+    model = np.zeros(length)
+    for i in range(length):
+        model = np.append(signal[i]-1*model[0:order]@x, model)
+        model = np.delete(model, -1)
+    return model[::-1]
+
+
 if __name__ == "__main__":
     order = int(float(input("Please enter the order of the model: ")))
     sound, frame_rate, frame_num, channel_num = read_wav("./helloworld.wav")
     channel = get_channel(sound, channel_num)
-    window = pick_window(channel, 40000, frame_rate)/32768
-    # window = window*0+1
+    window = pick_window(channel, 41000, frame_rate)/32768
     window_dft = fftpack.fft(window)
     magnitude = abs(window_dft)
+    draw_signal(window, frame_rate)
     draw_dft(magnitude)
     # Ax = y
     A = get_autocorr_matrix(window, order)
     y = -1*get_autocorr_array(window, order, 0)
     x = np.linalg.solve(A, y)
     G_square = get_G_square(window, order, x)
-    H = get_H(len(window), x, G_square**(0.5))
-    magnitude_H = abs(H)
-    draw_dft(magnitude_H)
-    h = fftpack.ifft(H)
-    draw_signal(window, frame_rate)
+    LTI_signal = np.zeros(len(window))
+    LTI_signal[0] = G_square**0.5
+    h = get_model(LTI_signal, x, G_square, order, len(window))
     draw_signal(abs(h), frame_rate)
     if DEBUG:
         window = np.array([0.5, 1, 2, 1, 0.5, 0.25, 0.125])
@@ -108,4 +116,12 @@ if __name__ == "__main__":
         x = np.linalg.solve(A, y)
         G_square = get_G_square(window, 2, x)
         print(x)
-        print(G_square**0.5)
+        print(G_square)
+        LTI_signal = np.zeros(len(window))
+        LTI_signal[0] = G_square**0.5
+        h = get_model(LTI_signal, x, G_square, 2, len(window))
+        print(h)
+        pyplot.plot(window)
+        pyplot.show()
+        pyplot.plot(h)
+        pyplot.show()
